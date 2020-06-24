@@ -1,8 +1,23 @@
 
-dist: xenial
+dist: bionic
 sudo: required
 
 language: c
+
+env:
+  global:
+   - secure: "pZ1vOb+IxTFp3H4xQHqyZwlU+SEbowaVB0S4jlts8UcD8V+htFuK2gdlsmxgm8sQFTkOp+H58LnrqZOTiYEQa69V6JJf1mFRRmpJTP2fv7ioV+qneW5uy1iGIH7+Qne+yQOYQobTAXaq0LnF7QP1+De4RUmlstWjE0QYBXM7HxHMB7VJHkkxpD4j9/QpNgxLE6GBu0+vjYe+FYD/Hor99GmIuh8IwtrjLa4W0EcDieNf1ngHoQbSdMRZBue1VG90HGip9y1cTN/e2vFB8z0KsythDMeUijNxUQs5OMTg4qaJV8su6KvFgcAycXjkU1QcMx3d30ymzL1TccGW8XDAMIIulWIFhlX0i976DZYMb52jAKEEYtxQwhBakID8IL/cjjIZ4hi09n/zJfB1lQmclOKU2yUW6pbKCApUCpOm2QnpwRerywlFA1/6pHByVNUm6JqsXcj4FneNlHRVvRQpPosHSvllltOw97IMDgL1NcJR7Ta9WrdfgEU/whhsEBWRGu5XujgOmtGYtDohQk++X4Asj5FeR5bezra5Rqu/b+s718pjQ5FVnYJqpPJN0AliJ9CuaE4BEgdV5mLPw+r/+TxgYX8GnJ/GnM72pjPVEVhwJeW9xzOrw28k35MbszI7DMi1GGG9hB+q4mQD/8FpTtCFoNETTd66G2Nrtnkt5BU="
+
+addons:
+  coverity_scan:
+    project:
+      name: "sbabic/libubootenv"
+      description: Library to access U-Boot environment
+    notification_email: swupdate@googlegroups.com
+    build_command_prepend: mkdir Debug;cd Debug;cmake -DCMAKE_BUILD_TYPE=Debug ..
+    build_command: make
+    branch_pattern: coverity_scan
+
 
 before_install:
     - sudo apt-get -qq update
@@ -11,6 +26,7 @@ before_install:
     - sudo apt-get install -y linux-libc-dev
     - sudo apt-get install -y cmake
     - sudo apt-get install -y git
+    - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 script:
     - mkdir Debug
